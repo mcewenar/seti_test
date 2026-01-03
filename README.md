@@ -143,14 +143,15 @@ Código mantenible
 ### Construir imagen
 ```bash
   docker build -t franchises-api .
+```
 
+ Ejecución Local
 
-Ejecución Local
-Prerrequisitos
+# Prerrequisitos
 
-Java 21
+ Java 21
 
-MongoDB en ejecución (local o Docker)
+ MongoDB en ejecución (local o Docker)
 
-Levantar la aplicación
+## Levantar la aplicación
 ./gradlew bootRun
