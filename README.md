@@ -155,3 +155,7 @@ Código mantenible
 
 ## Levantar la aplicación
 ./gradlew bootRun
+
+
+## Limpiar caché
+./gradlew clean bootRun
