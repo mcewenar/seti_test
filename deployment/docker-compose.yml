@@ -1,0 +1,25 @@
+services:
+  mongo:
+    image: mongo:${MONGO_VERSION}
+    container_name: seti-mongo
+    ports:
+      - "${MONGO_PORT}:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: seti-api
+    ports:
+      - "${APP_PORT}:8080"
+    environment:
+      SPRING_DATA_MONGODB_URI: mongodb://mongo:27017/${MONGO_DB}
+    depends_on:
+      - mongo
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

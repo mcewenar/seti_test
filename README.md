@@ -64,6 +64,17 @@ Franchise
 - **Branch**: nombre, franchiseId
 - **Product**: nombre, stock, branchId
 
+
++-------------------+       1         N       +-------------------+       1         N         +-------------------+
+|     FRANCHISE      |------------------------>|       BRANCH       |------------------------>|      PRODUCT       |
++-------------------+                          +-------------------+                          +-------------------+
+| id (PK)           |                          | id (PK)           |                          | id (PK)           |
+| name              |                          | franchiseId (FK)  |                          | branchId (FK)     |
++-------------------+                          | name              |                          | name              |
++-------------------+                          | stock             |
++-------------------+
+
+
 ---
 
 ## Consideraciones Reactivas
@@ -104,7 +115,7 @@ Franchise
 
 ---
 
-## Pruebas
+# Pruebas
 
 - Se implementan pruebas unitarias para:
     - Casos de uso
@@ -189,18 +200,93 @@ curl http://localhost:8080/franchises/{franchiseId}/products/max-stock
 
 ---
 
-## Ejecución con Docker
+# Docker setup
 
-### Construir imagen
+## OPCIÓN 1:
+
+
+## 1. Ejecución Local de Mongo:
+
+### 1. Traer imagen oficial de Mongo
+ ```bash
+    docker pull mongo:8.0
+ ```
+
+### 2. Correr docker
+  ```bash
+    docker run -d --name seti-mongo -p 27017:27017 mongo:8.0
+ ```
+
+
+
+## 2. Construir y instanciar aplicación de Franchise-seti
+### 1. Construir imagen de docker
+ ```bash
+    docker build -t franchises-api .
+ ```
+
+### 2. Correr docker
+  ```bash
+    docker run -d --name seti-mongo -p 27017:27017 mongo:8.0
+ ```
+
+### 3. Correr la aplicacion
+
 ```bash
-  docker build -t franchises-api .
+  docker run -d --name seti-api -p 8080:8080 -e SPRING_DATA_MONGODB_URI=mongodb://host.docker.internal:27017/seti seti-franchises-api
 ```
 
- Ejecución Local
+
+## OPCIÓN 2 por docker-compose.yaml:
+## Docker (Recommended)
+
+ This project can be executed using Docker Compose, running both:
+- **MongoDB** (persistence)
+- **Spring WebFlux API** (application)
+
+### Prerequisites
+ - Docker + Docker Compose
+
+Verify:
+```bash
+  docker --version
+ docker compose version
+```
+Después:
+```bash
+  docker compose up --build -d
+```
+Revisar running containers:
+```bash
+  docker compose ps
+
+```
+Revisar logs:
+1. API LOGS
+```bash
+  docker compose logs -f api
+```
+2. Mongo logs:
+```bash
+   docker compose logs -f mongo
+```
+3. Stop and remove everything (including DB data)
+```bash
+   docker compose down -v
+```
+MongoDB connection used by the API
+
+The API connects internally using:
+
+ - mongodb://mongo:27017/seti
+
+---
 
 # Prerrequisitos
 
  Java 21
+
+ Gradle > 8
 
  MongoDB en ejecución (local o Docker)
 
