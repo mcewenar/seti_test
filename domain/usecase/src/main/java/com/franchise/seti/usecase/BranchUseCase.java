@@ -39,10 +39,9 @@ public class BranchUseCase {
                 .flatMap(franchise ->
                         branchRepository.existsByNameAndFranchiseId(normalizedBranchName, fId)
                                 .flatMap(exists -> exists
-                                                ? Mono.error(new CustomExceptions.ConflictException(
-                                                "Branch name already exists in this franchise"
-                                        ))
-                                                : Mono.just(franchise)
+                                        ? Mono.error(new CustomExceptions.ConflictException(
+                                                        "Branch name already exists in this franchise"))
+                                        : Mono.just(franchise)
                                 )
                 )
                 .map(franchise -> Branch.create(
@@ -56,11 +55,8 @@ public class BranchUseCase {
                                 "Branch created id=%s franchiseId=%s name=%s",
                                 b.getId().value(),
                                 b.getFranchiseId().value(),
-                                b.getName()
-                        ))
-                )
-                .doOnError(e ->
-                        log.severe(String.format("Error creating branch: %s", e.getMessage()))
+                                b.getName())))
+                .doOnError(e -> log.severe(String.format("Error creating branch: %s", e.getMessage()))
                 );
     }
 }

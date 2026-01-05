@@ -17,11 +17,9 @@ public class FranchiseUseCase {
     private final FranchiseRepository franchiseRepository;
 
     public Mono<Franchise> create(String name) {
-
         if (name == null || name.isBlank()) {
             return Mono.error(new CustomExceptions.ValidationException("franchise name is required"));
         }
-
         String normalizedName = name.trim();
 
         return franchiseRepository.existsByName(normalizedName)

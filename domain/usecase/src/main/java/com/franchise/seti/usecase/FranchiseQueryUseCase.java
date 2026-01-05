@@ -32,7 +32,6 @@ public class FranchiseQueryUseCase {
      * Returns the product with the highest stock per branch for a given franchise.
      */
     public Flux<MaxStockProductByBranch> getMaxStockProductPerBranch(String franchiseId) {
-
         if (franchiseId == null || franchiseId.isBlank()) {
             return Flux.error(new CustomExceptions.ValidationException("franchiseId is required"));
         }
@@ -66,9 +65,7 @@ public class FranchiseQueryUseCase {
     }
 
     private Mono<MaxStockProductByBranch> maxProductForBranch(Branch branch) {
-
         BranchId bId = branch.getId();
-
         return productRepository.findByBranchId(bId)
                 // Pick the product with max stock (reactive-friendly)
                 .reduce((p1, p2) -> p1.getStock() >= p2.getStock() ? p1 : p2)

@@ -26,7 +26,7 @@ public class RouterRest {
                 //Query
                 .andRoute(GET("/franchises/{franchiseId}/products/max-stock"), handler::maxStockByBranch)
 
-                //Optional extra points (rename)
+                //Optional (rename)
                 /*.andRoute(PUT("/franchises/{franchiseId}").and(accept(MediaType.APPLICATION_JSON)), handler::renameFranchise)
                 .andRoute(PUT("/branches/{branchId}").and(accept(MediaType.APPLICATION_JSON)), handler::renameBranch)
                 .andRoute(PUT("/products/{productId}").and(accept(MediaType.APPLICATION_JSON)), handler::renameProduct)
@@ -34,7 +34,7 @@ public class RouterRest {
                  */
 
 
-                // Global exception mapping for functional endpoints:
+                // Global exception
                 .filter(errorFilter);
     }
 }
