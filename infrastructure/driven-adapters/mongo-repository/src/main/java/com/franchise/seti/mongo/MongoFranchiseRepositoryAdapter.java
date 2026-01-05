@@ -27,12 +27,6 @@ public class MongoFranchiseRepositoryAdapter implements FranchiseRepository {
     }
 
     @Override
-    public Mono<Franchise> findByName(String name) {
-        return repository.findByName(name)
-                .map(this::toDomain);
-    }
-
-    @Override
     public Mono<Boolean> existsByName(String name) {
         return repository.existsByName(name);
     }
