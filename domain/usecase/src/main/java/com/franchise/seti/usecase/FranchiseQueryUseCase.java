@@ -9,23 +9,19 @@ import com.franchise.seti.model.gateways.BranchRepository;
 import com.franchise.seti.model.gateways.ProductRepository;
 import com.franchise.seti.model.ids.BranchId;
 import com.franchise.seti.model.ids.FranchiseId;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Comparator;
 
 @Log
+@RequiredArgsConstructor
 public class FranchiseQueryUseCase {
 
     private final BranchRepository branchRepository;
     private final ProductRepository productRepository;
 
-    public FranchiseQueryUseCase(BranchRepository branchRepository,
-                                 ProductRepository productRepository) {
-        this.branchRepository = branchRepository;
-        this.productRepository = productRepository;
-    }
 
     /**
      * Required query:
@@ -39,12 +35,9 @@ public class FranchiseQueryUseCase {
         FranchiseId fId = FranchiseId.of(franchiseId.trim());
 
         return branchRepository.findByFranchiseId(fId)
-                // If the franchise exists but has no branches, return 404 or empty?
-                // The challenge doesn't define it. I recommend EMPTY LIST (Flux.empty()).
                 .switchIfEmpty(Flux.empty())
                 .flatMap(branch ->
                         maxProductForBranch(branch)
-                                // If a branch has no products, just skip it (don’t fail the whole query)
                                 .switchIfEmpty(Mono.empty())
                 )
                 .doOnNext(r -> log.info(String.format(

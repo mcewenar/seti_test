@@ -6,24 +6,19 @@ import com.franchise.seti.model.gateways.BranchRepository;
 import com.franchise.seti.model.gateways.ProductRepository;
 import com.franchise.seti.model.ids.BranchId;
 import com.franchise.seti.model.ids.ProductId;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import reactor.core.publisher.Mono;
 
 import java.util.UUID;
 
 @Log
+@RequiredArgsConstructor
 public class ProductUseCase {
 
     private final BranchRepository branchRepository;
     private final ProductRepository productRepository;
 
-    public ProductUseCase(BranchRepository branchRepository,
-                          ProductRepository productRepository) {
-        this.branchRepository = branchRepository;
-        this.productRepository = productRepository;
-    }
-
-    /** Required: Add a new product to a branch */
     public Mono<Product> addToBranch(String branchId, String productName, int stock) {
 
         if (branchId == null || branchId.isBlank()) {
@@ -43,7 +38,6 @@ public class ProductUseCase {
                 .switchIfEmpty(Mono.error(new CustomExceptions.NotFoundException(
                         "Branch not found id=" + bId.value()
                 )))
-                // Optional: uniqueness inside the same branch (409)
                 .flatMap(branch ->
                         productRepository.existsByNameAndBranchId(normalizedName, bId)
                                 .flatMap(exists -> exists
@@ -92,7 +86,6 @@ public class ProductUseCase {
                         "Product not found id=" + pId.value()
                 )))
                 .flatMap(product -> {
-                    // Protect against deleting a product that doesn't belong to the given branch
                     if (!product.getBranchId().value().equals(bId.value())) {
                         return Mono.error(new CustomExceptions.ConflictException(
                                 "Product does not belong to the provided branchId"

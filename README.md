@@ -137,6 +137,57 @@ Código mantenible
 
 
 ---
+# Enpoints
+
+## Create a Franchise:
+## Endpoint: POST /franchises
+curl -X POST http://localhost:8080/franchises \
+-H "Content-Type: application/json" \
+-d '{
+"name": "Nequi"
+}'
+
+## Agregar una branch a una franquicia
+## Endpoint: POST /franchises/{franchiseId}/branches
+curl -X POST http://localhost:8080/franchises/{franchiseId}/branches \
+-H "Content-Type: application/json" \
+-d '{
+"name": "Medellin"
+}'
+
+
+## Agregar un producto a una branch
+POST /branches/{branchId}/products
+
+curl -X POST http://localhost:8080/branches/{branchId}/products \
+-H "Content-Type: application/json" \
+-d '{
+"name": "Coffee",
+"stock": 10
+}'
+
+## Borrar un producto de un branch
+DELETE /branches/{branchId}/products/{productId}
+
+curl -X DELETE http://localhost:8080/branches/{branchId}/products/{productId}
+
+## Actualizar un producto de un stock
+PATCH /products/{productId}/stock
+
+curl -X PATCH http://localhost:8080/products/{productId}/stock \
+-H "Content-Type: application/json" \
+-d '{
+"stock": 25
+}'
+
+
+## Obtener un producto con max stock por cada branch
+GET /franchises/{franchiseId}/products/max-stock
+
+curl http://localhost:8080/franchises/{franchiseId}/products/max-stock
+
+
+---
 
 ## Ejecución con Docker
 
