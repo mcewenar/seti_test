@@ -6,7 +6,6 @@
 .env
 
 # Gradle
-.gradle
 build
 **/build
 

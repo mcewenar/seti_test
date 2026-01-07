@@ -10,8 +10,8 @@ services:
 
   api:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: deployment/Dockerfile
     container_name: seti-api
     ports:
       - "${APP_PORT}:8080"

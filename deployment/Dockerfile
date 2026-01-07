@@ -12,12 +12,16 @@ WORKDIR /app
 COPY gradlew .
 #Esto mejora el caché de docker
 COPY gradle gradle
-COPY build.gradle settings.gradle ./
+COPY settings.gradle* ./
+COPY main.gradle ./
 
-# Copy source
+## Copy the rest of the source code
 # Copia el proyecto completo del source dentro del contenedor.
 COPY . .
 
+#Inside the Linux container, gradlew doesn’t have execute permission.
+#This usually happens when the repo was created/edited on Windows and the executable bit wasn’t preserved.
+RUN chmod +x gradlew
 # Build application (skip tests for faster image build)
 # Construye el spring boot ejecutable en .jar
 # bootJar crea un jar ejecutable
